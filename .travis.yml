@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t gowdacb/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true gowdacb/react-test npm run test
+
+  after_success:
+    - docker build -t gowdacb/multi-client ./client
+    - docker build -t gowdacb/multi-nginx ./nginx
+    - docker build -t gowdacb/multi-server ./server
+    - docker build -t gowdacb/multi-worker ./worker
+    # Log in to the docker CLI
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    # Take those images and push them to docker hub
+    - docker push gowdacb/multi-client
+    - docker push gowdacb/multi-nginx
+    - docker push gowdacb/multi-server
+    - docker push gowdacb/multi-worker

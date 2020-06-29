@@ -9,7 +9,7 @@ before_install:
 script:
   - docker run -e CI=true gowdacb/react-test npm run test
 
-  after_success:
+after_success:
     - docker build -t gowdacb/multi-client ./client
     - docker build -t gowdacb/multi-nginx ./nginx
     - docker build -t gowdacb/multi-server ./server

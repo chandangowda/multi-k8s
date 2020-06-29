@@ -18,3 +18,5 @@ after_success:
     - docker push gowdacb/multi-nginx
     - docker push gowdacb/multi-server
     - docker push gowdacb/multi-worker
+
+language: generic

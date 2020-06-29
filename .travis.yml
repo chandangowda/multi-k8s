@@ -2,13 +2,6 @@ sudo: required
 services:
   - docker
 
-before_install:
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t gowdacb/react-test -f ./client/Dockerfile.dev ./client
-
-script:
-  - docker run -e CI=true gowdacb/react-test npm run test
-
 after_success:
     - docker build -t gowdacb/multi-client ./client
     - docker build -t gowdacb/multi-nginx ./nginx
